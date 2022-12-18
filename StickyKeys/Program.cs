@@ -2,7 +2,7 @@
 
 namespace StickyKeys
 {
-    class Program
+    internal static class Program
     {
         const uint SKF_AVAILABLE = 0x00000002;
         const uint SKF_CONFIRMHOTKEY = 0x00000008;
@@ -12,31 +12,30 @@ namespace StickyKeys
         const uint SKF_TRISTATE = 0x00000080;
         const uint SKF_TWOKEYSOFF = 0x00000100;
         const uint SPI_SETSTICKYKEYS = 0x003B;
+        const uint SPIF_SENDCHANGE = 0x2;
+
         [DllImport("user32.dll")]
-        static extern bool SystemParametersInfo(uint uiAction, uint uiParam, ref STICKYKEYS pvParam, uint fWinIni);
+        //private static extern bool SystemParametersInfo(uint uiAction, uint uiParam, ref Stickykeys pvParam, uint fWinIni);
+        private static extern bool SystemParametersInfo(uint uiAction, uint uiParam, ref Stickykeys pvParam, uint fWinIni);
+
 
         [StructLayout(LayoutKind.Sequential)]
-        struct STICKYKEYS
+        private struct Stickykeys
         {
             public uint cbSize;
             public uint dwFlags;
         }
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            STICKYKEYS stickyKeys = new STICKYKEYS();
+            var stickyKeys = new Stickykeys();
             stickyKeys.cbSize = (uint)Marshal.SizeOf(stickyKeys);
             stickyKeys.dwFlags = SKF_AVAILABLE | SKF_CONFIRMHOTKEY | SKF_STICKYKEYSON | SKF_HOTKEYACTIVE | SKF_INDICATOR | SKF_TRISTATE | SKF_TWOKEYSOFF;
-
-            bool result = SystemParametersInfo(SPI_SETSTICKYKEYS, (uint)Marshal.SizeOf(stickyKeys), ref stickyKeys, 0);
-            if (result)
-            {
-                Console.WriteLine("Successfully set sticky keys settings.");
-            }
-            else
-            {
-                Console.WriteLine("Failed to set sticky keys settings.");
-            }
+            
+            var result = SystemParametersInfo(SPI_SETSTICKYKEYS, (uint)Marshal.SizeOf(stickyKeys), ref stickyKeys, SPIF_SENDCHANGE);
+            Console.WriteLine(result
+                ? "Successfully set sticky keys settings."
+                : "Failed to set sticky keys settings.");
         }
     }
 }
