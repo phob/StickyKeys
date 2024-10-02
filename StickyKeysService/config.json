@@ -1,0 +1,11 @@
+{
+    "StickyKeysOn": true,
+    "HotKeyActive": true,
+    "ConfirmHotKey": true,
+    "HotKeySound": true,
+    "AudibleFeedback": false,
+    "TriState": true,
+    "TwoKeysOff": true,
+    "TaskIndicator": true
+  }
+  
