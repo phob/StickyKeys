@@ -3,12 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.IO;
-using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Serilog;
-using System.Diagnostics.CodeAnalysis;
 
-namespace StickyKeysService
+namespace StickyKeysAgent
 {
     public class Worker
     {
@@ -31,10 +29,6 @@ namespace StickyKeysService
                 Environment.Exit(0);
             }
 
-            // Configure Serilog
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.File("Logs/StickyKeysAgent.log", rollingInterval: RollingInterval.Day)
-                .CreateLogger();
 
             Log.Information("Worker initialized.");
 
@@ -98,12 +92,6 @@ namespace StickyKeysService
         public async Task RunAsync()
         {
             Log.Information("StickyKeysAgent started.");
-
-            Console.CancelKeyPress += (sender, e) =>
-            {
-                e.Cancel = true;
-                _running = false;
-            };
 
             while (_running)
             {

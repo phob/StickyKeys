@@ -1,4 +1,4 @@
-namespace StickyKeysService
+namespace StickyKeysAgent
 {
     public class ConfigSettings
     {
