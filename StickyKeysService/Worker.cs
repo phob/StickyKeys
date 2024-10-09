@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
-using System.IO;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 
@@ -16,8 +15,9 @@ namespace StickyKeysAgent
         private static Mutex _mutex;
         private IDisposable _changeToken;
 
-        public Worker()
+        public Worker(IConfiguration configuration)
         {
+            _configuration = configuration;
             const string appName = "StickyKeysAgent";
             bool createdNew;
 
@@ -29,17 +29,7 @@ namespace StickyKeysAgent
                 Environment.Exit(0);
             }
 
-
             Log.Information("Worker initialized.");
-
-            // Get executable path
-            var configPath = Path.Combine(AppContext.BaseDirectory, "config.json");
-
-            // Build configuration
-            var builder = new ConfigurationBuilder()
-                .AddJsonFile(configPath, optional: false, reloadOnChange: true);
-
-            _configuration = builder.Build();
 
             // Load settings
             LoadSettings();
@@ -76,10 +66,7 @@ namespace StickyKeysAgent
         {
             try
             {
-                var newSettings = new ConfigSettings();
-                _configuration.Bind(newSettings);
-
-                _settings = newSettings;
+                _settings = _configuration.Get<ConfigSettings>();
                 Log.Information("Configuration loaded successfully.");
             }
             catch (Exception ex)
@@ -87,7 +74,6 @@ namespace StickyKeysAgent
                 Log.Error(ex, "Failed to load configuration. Using last known good configuration.");
             }
         }
-
 
         public async Task RunAsync()
         {

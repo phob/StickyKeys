@@ -6,6 +6,7 @@
     "AudibleFeedback": false,
     "TriState": true,
     "TwoKeysOff": true,
-    "TaskIndicator": true
-  }
-  
+    "TaskIndicator": true,
+    "Autostart": false,
+    "FirstRun": true
+}
