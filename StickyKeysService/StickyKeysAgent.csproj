@@ -2,6 +2,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
+    <PublishDir>$(SolutionDir)publish\$(MSBuildProjectName)</PublishDir>
     <UseWindowsForms>true</UseWindowsForms>
     <PublishSingleFile>true</PublishSingleFile>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
@@ -13,12 +14,6 @@
     <DebugSymbols>false</DebugSymbols>
     <ApplicationIcon>stickykeys_FKG_icon.ico</ApplicationIcon>
   </PropertyGroup>
-  <ItemGroup>
-    <Content Include="stickykeys_FKG_icon.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />

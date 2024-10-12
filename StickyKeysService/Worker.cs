@@ -11,7 +11,7 @@ namespace StickyKeysAgent
     {
         private readonly IConfiguration _configuration;
         private ConfigSettings _settings;
-        private bool _running = true;
+        private readonly bool _running = true;
         private static Mutex _mutex;
         private IDisposable _changeToken;
 
