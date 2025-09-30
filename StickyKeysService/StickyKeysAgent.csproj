@@ -2,6 +2,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net9.0-windows</TargetFramework>
+    <BaseOutputPath>$(SolutionDir)dist\$(MSBuildProjectName)\</BaseOutputPath>
     <PublishDir>$(SolutionDir)publish\$(MSBuildProjectName)</PublishDir>
     <UseWindowsForms>true</UseWindowsForms>
     <PublishSingleFile>true</PublishSingleFile>
