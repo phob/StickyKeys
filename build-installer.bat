@@ -11,6 +11,7 @@ if exist "publish" (
 )
 
 echo Publishing project...
+dotnet gitversion /updateprojectfiles
 dotnet publish StickyKeysService.sln -c Release
 if errorlevel 1 (
     echo Publish failed

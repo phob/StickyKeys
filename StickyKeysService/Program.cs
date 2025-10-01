@@ -103,54 +103,65 @@ namespace StickyKeysAgent
         private static ContextMenuStrip CreateContextMenu()
         {
             var contextMenu = new ContextMenuStrip();
-            contextMenu.Items.Add(CreateStickyKeysSubmenu());
-            contextMenu.Items.Add(new ToolStripSeparator());
-            contextMenu.Items.Add(CreateAutostartMenuItem());
-            contextMenu.Items.Add(CreateExitMenuItem());
-            return contextMenu;
-        }
 
-        private static ToolStripMenuItem CreateStickyKeysSubmenu()
-        {
-            var submenu = new ToolStripMenuItem("Sticky Keys Options");
-
-            submenu.DropDownItems.Add(CreateSettingMenuItem("Enable Sticky Keys",
+            contextMenu.Items.Add(CreateSettingMenuItem("Enable Sticky Keys",
                 () => _settings.StickyKeysOn,
                 value => _settings.StickyKeysOn = value));
 
-            submenu.DropDownItems.Add(new ToolStripSeparator());
+            contextMenu.Items.Add(new ToolStripSeparator());
 
-            submenu.DropDownItems.Add(CreateSettingMenuItem("Keyboard shortcut for Sticky keys (5x Shift)",
+            contextMenu.Items.Add(CreateSettingMenuItem("Keyboard shortcut for Sticky keys (5x Shift)",
                 () => _settings.HotKeyActive,
                 value => _settings.HotKeyActive = value));
 
-            submenu.DropDownItems.Add(CreateSettingMenuItem("Notify me when I turn on Sticky Keys",
+            contextMenu.Items.Add(CreateSettingMenuItem("Notify me when I turn on Sticky Keys",
                 () => _settings.ConfirmHotKey,
                 value => _settings.ConfirmHotKey = value));
 
-            submenu.DropDownItems.Add(CreateSettingMenuItem("Play a sound when turning on or off Sticky Keys",
+            contextMenu.Items.Add(CreateSettingMenuItem("Play a sound when turning on or off Sticky Keys",
                 () => _settings.HotKeySound,
                 value => _settings.HotKeySound = value));
 
-            submenu.DropDownItems.Add(new ToolStripSeparator());
+            contextMenu.Items.Add(new ToolStripSeparator());
 
-            submenu.DropDownItems.Add(CreateSettingMenuItem("Play a sound when a modifier key is pressed",
+            contextMenu.Items.Add(CreateSettingMenuItem("Play a sound when a modifier key is pressed",
                 () => _settings.AudibleFeedback,
                 value => _settings.AudibleFeedback = value));
 
-            submenu.DropDownItems.Add(CreateSettingMenuItem("Lock shortcut keys when pressed twice in a row",
+            contextMenu.Items.Add(CreateSettingMenuItem("Lock shortcut keys when pressed twice in a row",
                 () => _settings.TriState,
                 value => _settings.TriState = value));
 
-            submenu.DropDownItems.Add(CreateSettingMenuItem("Turn off sticky keys when two keys are pressed simultaneously",
+            contextMenu.Items.Add(CreateSettingMenuItem("Turn off sticky keys when two keys are pressed simultaneously",
                 () => _settings.TwoKeysOff,
                 value => _settings.TwoKeysOff = value));
 
-            submenu.DropDownItems.Add(CreateSettingMenuItem("Show the sticky keys icon on the taskbar",
+            contextMenu.Items.Add(CreateSettingMenuItem("Show the sticky keys icon on the taskbar",
                 () => _settings.TaskIndicator,
                 value => _settings.TaskIndicator = value));
 
-            return submenu;
+            contextMenu.Items.Add(new ToolStripSeparator());
+
+            contextMenu.Items.Add(CreateAutostartMenuItem());
+            contextMenu.Items.Add(CreateAboutMenuItem());
+            contextMenu.Items.Add(CreateExitMenuItem());
+
+            return contextMenu;
+        }
+
+        private static ToolStripMenuItem CreateAboutMenuItem()
+        {
+            var aboutItem = new ToolStripMenuItem("About...");
+            aboutItem.Click += (sender, e) => ShowAboutDialog();
+            return aboutItem;
+        }
+
+        private static void ShowAboutDialog()
+        {
+            using (var aboutDialog = new AboutDialog())
+            {
+                aboutDialog.ShowDialog();
+            }
         }
 
         private static ToolStripMenuItem CreateSettingMenuItem(string text, Func<bool> getValue, Action<bool> setValue)
