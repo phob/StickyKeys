@@ -102,9 +102,71 @@ namespace StickyKeysAgent
         private static ContextMenuStrip CreateContextMenu()
         {
             var contextMenu = new ContextMenuStrip();
+            contextMenu.Items.Add(CreateStickyKeysSubmenu());
+            contextMenu.Items.Add(new ToolStripSeparator());
             contextMenu.Items.Add(CreateAutostartMenuItem());
             contextMenu.Items.Add(CreateExitMenuItem());
             return contextMenu;
+        }
+
+        private static ToolStripMenuItem CreateStickyKeysSubmenu()
+        {
+            var submenu = new ToolStripMenuItem("Sticky Keys Options");
+
+            submenu.DropDownItems.Add(CreateSettingMenuItem("Enable Sticky Keys",
+                () => _settings.StickyKeysOn,
+                value => _settings.StickyKeysOn = value));
+
+            submenu.DropDownItems.Add(new ToolStripSeparator());
+
+            submenu.DropDownItems.Add(CreateSettingMenuItem("Hot Key Active (5x Shift)",
+                () => _settings.HotKeyActive,
+                value => _settings.HotKeyActive = value));
+
+            submenu.DropDownItems.Add(CreateSettingMenuItem("Confirm Hot Key",
+                () => _settings.ConfirmHotKey,
+                value => _settings.ConfirmHotKey = value));
+
+            submenu.DropDownItems.Add(CreateSettingMenuItem("Hot Key Sound",
+                () => _settings.HotKeySound,
+                value => _settings.HotKeySound = value));
+
+            submenu.DropDownItems.Add(new ToolStripSeparator());
+
+            submenu.DropDownItems.Add(CreateSettingMenuItem("Audible Feedback",
+                () => _settings.AudibleFeedback,
+                value => _settings.AudibleFeedback = value));
+
+            submenu.DropDownItems.Add(CreateSettingMenuItem("Tri-State",
+                () => _settings.TriState,
+                value => _settings.TriState = value));
+
+            submenu.DropDownItems.Add(CreateSettingMenuItem("Two Keys Off",
+                () => _settings.TwoKeysOff,
+                value => _settings.TwoKeysOff = value));
+
+            submenu.DropDownItems.Add(CreateSettingMenuItem("Tray Indicator",
+                () => _settings.TaskIndicator,
+                value => _settings.TaskIndicator = value));
+
+            return submenu;
+        }
+
+        private static ToolStripMenuItem CreateSettingMenuItem(string text, Func<bool> getValue, Action<bool> setValue)
+        {
+            var menuItem = new ToolStripMenuItem(text)
+            {
+                Checked = getValue()
+            };
+            menuItem.Click += (sender, e) => ToggleSetting(menuItem, getValue, setValue);
+            return menuItem;
+        }
+
+        private static void ToggleSetting(ToolStripMenuItem menuItem, Func<bool> getValue, Action<bool> setValue)
+        {
+            menuItem.Checked = !menuItem.Checked;
+            setValue(menuItem.Checked);
+            SaveSettings();
         }
 
         private static ToolStripMenuItem CreateAutostartMenuItem()
