@@ -45,7 +45,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "publish\StickyKeysAgent\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "publish\StickyKeysAgent\config.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "publish\StickyKeysAgent\config.json"; DestDir: "{app}"; Flags: onlyifdoesntexist
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

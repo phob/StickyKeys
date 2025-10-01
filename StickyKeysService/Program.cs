@@ -64,6 +64,7 @@ namespace StickyKeysAgent
                 _settings.Autostart = ShowFirstRunDialog();
                 _settings.FirstRun = false;
                 SaveSettings();
+                SaveAutostartSetting(_settings.Autostart);
             }
         }
 
@@ -119,33 +120,33 @@ namespace StickyKeysAgent
 
             submenu.DropDownItems.Add(new ToolStripSeparator());
 
-            submenu.DropDownItems.Add(CreateSettingMenuItem("Hot Key Active (5x Shift)",
+            submenu.DropDownItems.Add(CreateSettingMenuItem("Keyboard shortcut for Sticky keys (5x Shift)",
                 () => _settings.HotKeyActive,
                 value => _settings.HotKeyActive = value));
 
-            submenu.DropDownItems.Add(CreateSettingMenuItem("Confirm Hot Key",
+            submenu.DropDownItems.Add(CreateSettingMenuItem("Notify me when I turn on Sticky Keys",
                 () => _settings.ConfirmHotKey,
                 value => _settings.ConfirmHotKey = value));
 
-            submenu.DropDownItems.Add(CreateSettingMenuItem("Hot Key Sound",
+            submenu.DropDownItems.Add(CreateSettingMenuItem("Play a sound when turning on or off Sticky Keys",
                 () => _settings.HotKeySound,
                 value => _settings.HotKeySound = value));
 
             submenu.DropDownItems.Add(new ToolStripSeparator());
 
-            submenu.DropDownItems.Add(CreateSettingMenuItem("Audible Feedback",
+            submenu.DropDownItems.Add(CreateSettingMenuItem("Play a sound when a modifier key is pressed",
                 () => _settings.AudibleFeedback,
                 value => _settings.AudibleFeedback = value));
 
-            submenu.DropDownItems.Add(CreateSettingMenuItem("Tri-State",
+            submenu.DropDownItems.Add(CreateSettingMenuItem("Lock shortcut keys when pressed twice in a row",
                 () => _settings.TriState,
                 value => _settings.TriState = value));
 
-            submenu.DropDownItems.Add(CreateSettingMenuItem("Two Keys Off",
+            submenu.DropDownItems.Add(CreateSettingMenuItem("Turn off sticky keys when two keys are pressed simultaneously",
                 () => _settings.TwoKeysOff,
                 value => _settings.TwoKeysOff = value));
 
-            submenu.DropDownItems.Add(CreateSettingMenuItem("Tray Indicator",
+            submenu.DropDownItems.Add(CreateSettingMenuItem("Show the sticky keys icon on the taskbar",
                 () => _settings.TaskIndicator,
                 value => _settings.TaskIndicator = value));
 
@@ -210,16 +211,14 @@ namespace StickyKeysAgent
 
         private static void SaveAutostartSetting(bool enable)
         {
-            using (var key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
+            using var key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+            if (enable)
             {
-                if (enable)
-                {
-                    key?.SetValue("StickyKeysAgent", Process.GetCurrentProcess().MainModule.FileName);
-                }
-                else
-                {
-                    key?.DeleteValue("StickyKeysAgent", false);
-                }
+                key?.SetValue("StickyKeysAgent", Process.GetCurrentProcess().MainModule.FileName);
+            }
+            else
+            {
+                key?.DeleteValue("StickyKeysAgent", false);
             }
         }
     }
